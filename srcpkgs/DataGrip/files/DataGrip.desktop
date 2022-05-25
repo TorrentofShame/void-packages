@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=DataGrip
+Comment=Many databases, one tool
+TryExec=DataGrip
+Exec=DataGrip %U
+Icon=/usr/lib/DataGrip/bin/datagrip.svg
+Terminal=false
+Categories=Application;Development;Utility;
