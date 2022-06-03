@@ -1,32 +1,34 @@
 # Template file for 'lua-language-server'
 pkgname=lua-language-server
-version=3.7.4
+version=3.2.4
 revision=1
-hostmakedepends="ninja"
-short_desc="Lua LSP implementation written in Lua"
-maintainer="icp <pangolin@vivaldi.net>"
+archs="x86_64"
+create_wrksrc=yes
+short_desc="Lua Language Server"
+maintainer="Simon Weizman <contact@simon.weizman.us>"
 license="MIT"
-homepage="https://github.com/LuaLS/lua-language-server"
-changelog="https://raw.githubusercontent.com/LuaLS/lua-language-server/master/changelog.md"
-distfiles="https://github.com/LuaLS/lua-language-server/releases/download/${version}/lua-language-server-${version}-submodules.zip"
-checksum=4993365d2fd34ea460d5614927c752f27294181a6304901c3198a9defced673b
-
-do_build() {
-	ninja -C 3rd/luamake -f compile/ninja/linux.ninja
-	./3rd/luamake/luamake -platform ${XBPS_TARGET_MACHINE} rebuild
-}
+homepage="https://github.com/sumneko/lua-language-server"
+changelog="https://raw.githubusercontent.com/sumneko/lua-language-server/${version}/changelog.md"
+distfiles="https://github.com/sumneko/lua-language-server/releases/download/${version}/lua-language-server-${version}-linux-x64.tar.gz"
+checksum=e5b8f245f95ecb9bca86b9a6c7c0c447ba23abd9f35c3344cf21abecc07c2e67
 
 do_install() {
-	vinstall main.lua 644 usr/lib/${pkgname}
-	vinstall debugger.lua 644 usr/lib/${pkgname}
-	vinstall changelog.md 644 usr/lib/${pkgname}
-	vinstall bin/main.lua 644 usr/lib/${pkgname}/bin
-	vinstall bin/${pkgname} 755 usr/lib/${pkgname}/bin
+		TARGET_PATH="usr/lib/${pkgname}"
 
-	vcopy meta usr/lib/${pkgname}
-	vcopy locale usr/lib/${pkgname}
-	vcopy script usr/lib/${pkgname}
+		vmkdir usr/bin
+		vmkdir ${TARGET_PATH}
 
-	vbin ${FILESDIR}/lua-language-server
-	vlicense LICENSE
+		vlicense LICENSE
+
+		local launcher_path="bin/lua-language-server"
+
+		vcopy bin ${TARGET_PATH}
+		vcopy locale ${TARGET_PATH}
+		vcopy meta ${TARGET_PATH}
+		vcopy script ${TARGET_PATH}
+		vcopy debugger.lua ${TARGET_PATH}
+		vcopy main.lua ${TARGET_PATH}
+
+		vbin ${FILESDIR}/lua-language-server
+
 }

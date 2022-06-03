@@ -1,0 +1,2 @@
+site="https://api.github.com/repos/sumneko/lua-language-server/tags"
+pattern="\K[^\d]*([\d\.]+)"
