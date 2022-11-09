@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Postman
+Comment=Api Client
+Terminal=false
+Type=Application
+Categories=Internet;Development;
+Exec=Postman
+Icon=Postman

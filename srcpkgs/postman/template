@@ -1,0 +1,52 @@
+# Template file for 'postman'
+pkgname=postman
+version=1.0.0
+revision=1
+archs="x86_64"
+create_wrksrc=yes
+short_desc="Postman API Client"
+maintainer="Simon Weizman <contact@simon.weizman.us>"
+license="MIT"
+homepage="https://postman.com"
+distfiles="https://dl.pstmn.io/download/latest/linux64"
+checksum=f4bff0f708de0c59481bd2189a61c21f56c81b3ceb423c6c1816bf8359b29e44
+repository=nonfree
+restricted=yes
+nopie=yes
+
+pre_extract() {
+
+    if [ ! -f "${XBPS_SRCDISTDIR}/${pkgname}-${version}/linux64.tar.gz" ]
+    then
+        mv "${XBPS_SRCDISTDIR}/${pkgname}-${version}/linux64" "${XBPS_SRCDISTDIR}/${pkgname}-${version}/linux64.tar.gz"
+    fi
+    distfiles="${distfiles}.tar.gz"
+}
+
+do_install() {
+    TARGET_PATH="usr/lib/${pkgname}"
+    vmkdir ${TARGET_PATH}
+
+    vmkdir usr/share/pixmaps
+    vcopy Postman/app/icons/icon_128x128.png usr/share/pixmaps/Postman.png
+
+    vmkdir usr/share/applications
+    vcopy "${FILESDIR}/Postman.desktop" usr/share/applications
+
+    vcopy Postman/app/icons $TARGET_PATH
+    vcopy Postman/app/locales $TARGET_PATH
+    vcopy Postman/app/resources $TARGET_PATH
+    vcopy Postman/app/swiftshader $TARGET_PATH
+
+    for item in chrome-sandbox chrome_100_percent.pak chrome_200_percent.pak\
+        icudtl.dat libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so\
+        libvulkan.so.1 postman Postman resources.pak snapshot_blob.bin\
+        v8_context_snapshot.bin vk_swiftshader_icd.json chrome_crashpad_handler; do
+        if [[ -f "Postman/app/${item}" ]]; then
+            vcopy "Postman/app/${item}" "${TARGET_PATH}"
+        fi
+    done
+
+    vmkdir usr/bin
+    ln -sfr $DESTDIR/$TARGET_PATH/Postman $DESTDIR/usr/bin/Postman
+}
